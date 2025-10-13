@@ -1,0 +1,18 @@
+{
+  "login": {
+    "welcome": "Bienvenido de nuevo",
+    "subtitle": "Inicia sesión para continuar con tus campañas",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "forgot": "¿Olvidaste tu contraseña?",
+    "button": "Iniciar sesión",
+    "noAccount": "¿No tienes una cuenta?",
+    "signup": "Regístrate"
+  },
+  "errors": {
+    "emailRequired": "El correo es obligatorio",
+    "emailInvalid": "Formato de correo inválido",
+    "passwordRequired": "La contraseña es obligatoria",
+    "passwordShort": "La contraseña debe tener al menos 6 caracteres"
+  }
+}

@@ -1,0 +1,19 @@
+@media screen {
+    .badgeWeb {
+        width: 4in;
+        height: 6in;
+        background: white;
+    }
+}
+
+@media print {
+    .badgeWeb {
+        width: 4in;
+        height: 6in;
+    }
+
+    @page {
+        size: 4in 6in;
+        margin: 0;
+    }
+}
