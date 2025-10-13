@@ -78,6 +78,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({
 
   const { width } = useWindowDimensions();
   const mostrarImagen = width > 768;
+  
   return (
     <LinearGradient colors={['#0f0f23', '#1a1a2e', '#16213e']} style={styles.container}>
       <SafeAreaView style={styles.safeArea}>

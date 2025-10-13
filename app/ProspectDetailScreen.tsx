@@ -303,7 +303,7 @@ const ProspectDetailScreen: React.FC<ProspectDetailScreenProps> = ({
                     style={styles.avatar}
                   >
                     <Text style={styles.avatarText}>
-                      {getInitials(prospect.name || prospect.fullName)}
+                      {getInitials(prospect.firstname || prospect.lastname)}
                     </Text>
                   </LinearGradient>
                 </View>
@@ -318,7 +318,7 @@ const ProspectDetailScreen: React.FC<ProspectDetailScreenProps> = ({
               </View>
 
               <View style={styles.profileInfo}>
-                <Text style={styles.profileName}>{prospect.name || prospect.fullName || 'Sin nombre'}</Text>
+                <Text style={styles.profileName}>{prospect.firstname || prospect.lastname || 'Sin nombre'}</Text>
                 <Text style={styles.profileTitle}>{prospect.position || prospect.jobTitle || ''}</Text>
                 <Text style={styles.profileCompany}>{prospect.company}</Text>
               </View>

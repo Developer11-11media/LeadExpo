@@ -67,11 +67,11 @@ const ProspectsListScreen: React.FC<ProspectsListScreenProps> = ({
         remoteProspects = await ProspectsListexhibitors(user?.email ?? "", user?.exhibitor_id ?? 0);
       }
       setProspects([]);
-
+      console.log(remoteProspects);
       const formatted: Prospect[] = remoteProspects.map((r: any) => ({
         id: r.id?.toString() || Math.random().toString(),
         firstname: r.firstname || 'Sin nombre',
-        lastname: r.lastname || 'Sin nombre',
+        lastname: r.last_name || 'Sin nombre',
         email: r.email || '',
         phone: r.phone || '',
         company: r.company || '',
@@ -135,7 +135,7 @@ const ProspectsListScreen: React.FC<ProspectsListScreenProps> = ({
         const formatted: Prospect[] = remoteProspects.map((r: any) => ({
           id: r.id?.toString() || Math.random().toString(),
           firstname: r.firstname || 'Sin nombre',
-          lastname: r.lastname || 'Sin nombre',
+          lastname: r.last_name || 'Sin nombre',
           email: r.email || '',
           phone: r.phone || '',
           company: r.company || '',
@@ -177,7 +177,7 @@ const ProspectsListScreen: React.FC<ProspectsListScreenProps> = ({
     const formatted: Prospect[] = remoteProspects.map((r: any) => ({
       id: r.id?.toString() || Math.random().toString(),
       firstname: r.firstname || 'Sin nombre',
-      lastname: r.lastname || 'Sin nombre',
+      lastname: r.last_name || 'Sin nombre',
       email: r.email || '',
       phone: r.phone || '',
       company: r.company || '',

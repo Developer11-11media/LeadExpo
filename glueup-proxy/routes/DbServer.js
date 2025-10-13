@@ -305,7 +305,7 @@ router.get("/ProspectsListexhibitors", async (req, res) => {
 
     // Formateamos los datos
     const prospects = result.recordset.map(r => ({
-      firstname: first_name,
+      firstname: r.first_name,
       last_name: r.last_name,
       email: r.email || '',
       phone: r.phone_number || '',
