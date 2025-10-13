@@ -17,3 +17,16 @@
         margin: 0;
     }
 }
+
+.imagen-responsive {
+  display: block; /* Muestra la imagen por defecto */
+  max-width: 100%;
+  height: auto;
+}
+
+/* Oculta la imagen en pantallas de 768px o más pequeñas */
+@media (max-width: 768px) {
+  .imagen-responsive {
+    display: none;
+  }
+}

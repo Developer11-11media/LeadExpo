@@ -3,6 +3,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { useContext, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Image } from 'react-native';
 import { User, UserContext } from "../services/UserContext";
 
 import {
@@ -12,7 +13,7 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  View
+  View, useWindowDimensions
 } from 'react-native';
 import { login } from "../services/authService";
 
@@ -59,7 +60,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({
         if (user) {
           await AsyncStorage.setItem("user", JSON.stringify(user));
           await saveUser(user);
-          
+
         }
 
         onLogin(email.trim(), password);
@@ -75,81 +76,98 @@ const LoginScreen: React.FC<LoginScreenProps> = ({
     i18n.changeLanguage(nextLang);
   };
 
-
-  
+  const { width } = useWindowDimensions();
+  const mostrarImagen = width > 768;
   return (
     <LinearGradient colors={['#0f0f23', '#1a1a2e', '#16213e']} style={styles.container}>
       <SafeAreaView style={styles.safeArea}>
-        <View style={styles.content}>
-          <View style={styles.header}>
-            <Text style={styles.title}>{t('login.welcome')}</Text>
-            <Text style={styles.subtitle}>{t('login.subtitle')}</Text>
-          </View>
 
-          {/* FORMULARIO */}
-          <View style={styles.form}>
-            {/* EMAIL */}
-            <View style={styles.inputContainer}>
-              <Text style={styles.label}>{t('login.email')}</Text>
-              <View style={[styles.inputWrapper, errors.email && styles.inputError]}>
-                <Ionicons name="mail-outline" size={20} color="#8b9dc3" style={styles.inputIcon} />
-                <TextInput
-                  style={styles.input}
-                  placeholder="name@example.com"
-                  placeholderTextColor="#666"
-                  value={email}
-                  onChangeText={(text) => {
-                    setEmail(text);
-                    if (errors.email) setErrors(prev => ({ ...prev, email: undefined }));
-                  }}
-                  keyboardType="email-address"
-                  autoCapitalize="none"
-                />
-              </View>
-              {errors.email && <Text style={styles.errorText}>{errors.email}</Text>}
+
+        <View style={[styles.content, !mostrarImagen && styles.centered]}>
+          {width > 768 && (
+            <View style={{ flex: 2 }}>
+
+              <Image
+                className="imagen-responsive"
+                source={require("../assets/images/connect.jpg")}
+                style={styles.Image}
+                resizeMode="cover"
+              />
+
+            </View>
+          )}
+          <View style={[styles.rightPane, !mostrarImagen && styles.centeredPane]}>
+            <View style={styles.header}>
+              <Text style={styles.title}>{t('login.welcome')}</Text>
+              <Text style={styles.subtitle}>{t('login.subtitle')}</Text>
             </View>
 
-            {/* PASSWORD */}
-            <View style={styles.inputContainer}>
-              <Text style={styles.label}>{t('login.password')}</Text>
-              <View style={[styles.inputWrapper, errors.password && styles.inputError]}>
-                <Ionicons name="lock-closed-outline" size={20} color="#8b9dc3" style={styles.inputIcon} />
-                <TextInput
-                  style={styles.input}
-                  placeholder="••••••••"
-                  placeholderTextColor="#666"
-                  value={password}
-                  onChangeText={(text) => {
-                    setPassword(text);
-                    if (errors.password) setErrors(prev => ({ ...prev, password: undefined }));
-                  }}
-                  secureTextEntry={!showPassword}
-                />
-                <TouchableOpacity onPress={() => setShowPassword(!showPassword)} style={styles.eyeIcon}>
-                  <Ionicons name={showPassword ? "eye-outline" : "eye-off-outline"} size={20} color="#8b9dc3" />
-                </TouchableOpacity>
+
+
+            {/* FORMULARIO */}
+            <View style={styles.form}>
+              {/* EMAIL */}
+              <View style={styles.inputContainer}>
+                <Text style={styles.label}>{t('login.email')}</Text>
+                <View style={[styles.inputWrapper, errors.email && styles.inputError]}>
+                  <Ionicons name="mail-outline" size={20} color="#8b9dc3" style={styles.inputIcon} />
+                  <TextInput
+                    style={styles.input}
+                    placeholder="name@example.com"
+                    placeholderTextColor="#666"
+                    value={email}
+                    onChangeText={(text) => {
+                      setEmail(text);
+                      if (errors.email) setErrors(prev => ({ ...prev, email: undefined }));
+                    }}
+                    keyboardType="email-address"
+                    autoCapitalize="none"
+                  />
+                </View>
+                {errors.email && <Text style={styles.errorText}>{errors.email}</Text>}
               </View>
-              {errors.password && <Text style={styles.errorText}>{errors.password}</Text>}
-            </View>
 
-            {/* LOGIN BUTTON */}
-            <TouchableOpacity style={styles.loginButton} onPress={handleLogin} disabled={isLoading}>
-              <LinearGradient colors={['#7c3aed', '#a855f7']} style={styles.loginButtonGradient}>
-                {isLoading ? (
-                  <ActivityIndicator color="white" />
-                ) : (
-                  <Text style={styles.loginButtonText}>{t('login.button')}</Text>
-                )}
-              </LinearGradient>
-            </TouchableOpacity>
+              {/* PASSWORD */}
+              <View style={styles.inputContainer}>
+                <Text style={styles.label}>{t('login.password')}</Text>
+                <View style={[styles.inputWrapper, errors.password && styles.inputError]}>
+                  <Ionicons name="lock-closed-outline" size={20} color="#8b9dc3" style={styles.inputIcon} />
+                  <TextInput
+                    style={styles.input}
+                    placeholder="••••••••"
+                    placeholderTextColor="#666"
+                    value={password}
+                    onChangeText={(text) => {
+                      setPassword(text);
+                      if (errors.password) setErrors(prev => ({ ...prev, password: undefined }));
+                    }}
+                    secureTextEntry={!showPassword}
+                  />
+                  <TouchableOpacity onPress={() => setShowPassword(!showPassword)} style={styles.eyeIcon}>
+                    <Ionicons name={showPassword ? "eye-outline" : "eye-off-outline"} size={20} color="#8b9dc3" />
+                  </TouchableOpacity>
+                </View>
+                {errors.password && <Text style={styles.errorText}>{errors.password}</Text>}
+              </View>
 
-            {/* <TouchableOpacity onPress={onForgotPassword} style={styles.forgotPasswordButton}>
+              {/* LOGIN BUTTON */}
+              <TouchableOpacity style={styles.loginButton} onPress={handleLogin} disabled={isLoading}>
+                <LinearGradient colors={['#7c3aed', '#a855f7']} style={styles.loginButtonGradient}>
+                  {isLoading ? (
+                    <ActivityIndicator color="white" />
+                  ) : (
+                    <Text style={styles.loginButtonText}>{t('login.button')}</Text>
+                  )}
+                </LinearGradient>
+              </TouchableOpacity>
+
+              {/* <TouchableOpacity onPress={onForgotPassword} style={styles.forgotPasswordButton}>
               <Text style={styles.forgotPasswordText}>{t('login.forgot')}</Text>
             </TouchableOpacity>
             */}
-          </View>
+            </View>
 
-          {/* FOOTER 
+            {/* FOOTER 
           <View style={styles.footer}>
             <Text style={styles.footerText}>{t('login.noAccount')} </Text>
             <TouchableOpacity onPress={onNavigateToRegister}>
@@ -157,12 +175,13 @@ const LoginScreen: React.FC<LoginScreenProps> = ({
             </TouchableOpacity>
           </View>
          */}
-          {/* CAMBIO DE IDIOMA */}
-          <TouchableOpacity onPress={toggleLanguage} style={{ marginTop: 20, alignSelf: 'center' }}>
-            <Text style={{ color: '#a855f7' }}>
-              {i18n.language === 'en' ? 'Cambiar a Español' : 'Switch to English'}
-            </Text>
-          </TouchableOpacity>
+            {/* CAMBIO DE IDIOMA */}
+            <TouchableOpacity onPress={toggleLanguage} style={{ marginTop: 20, alignSelf: 'center' }}>
+              <Text style={{ color: '#a855f7' }}>
+                {i18n.language === 'en' ? 'Cambiar a Español' : 'Switch to English'}
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </SafeAreaView>
     </LinearGradient>
@@ -175,13 +194,17 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  centered: {
+    justifyContent: 'center',
+  },
   safeArea: {
     flex: 1,
   },
   content: {
     flex: 1,
-    paddingHorizontal: 32,
-    justifyContent: 'center',
+    flexDirection: 'row', // lado por lado
+    width: '100%',
+    height: '100%',
   },
   header: {
     alignItems: 'center',
@@ -201,6 +224,7 @@ const styles = StyleSheet.create({
   },
   form: {
     marginBottom: 32,
+    width: '100%',
   },
   inputContainer: {
     marginBottom: 24,
@@ -278,6 +302,45 @@ const styles = StyleSheet.create({
     color: '#a855f7',
     fontSize: 16,
     fontWeight: '600',
+  },
+  Image: {
+    flex: 2,
+    width: '100%',
+    height: '100%',
+  },
+  rightPane: {
+    flex: 1, // ocupa parte del espacio junto con la imagen
+    padding: 20,
+    justifyContent: 'center',
+    // Agrega esto:
+    minWidth: 320, // (Opcional: un mínimo para el formulario en móvil/pequeño)
+  },
+  centeredPane: {
+    // Cuando no mostramos la imagen, este panel usa todo el espacio.
+    flex: 1,
+    width: '100%', // <--- ¡Esta es la clave!
+    justifyContent: 'center', // central vertical
+    alignItems: 'center', // <--- ¡Esto es para centrar horizontalmente el contenido (header, form)!
+    maxWidth: 450, // (Opcional: Limita el ancho del formulario en pantallas gigantes)
+    alignSelf: 'center', // <--- ¡Esta es la otra clave! Lo centra en el centro del `content`
+  },
+  button: {
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    backgroundColor: '#7c3aed',
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#a855f7',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  buttonPressed: {
+    opacity: 0.8,
+  },
+  buttonText: {
+    color: 'white',
+    fontWeight: '600',
+    fontSize: 14,
   },
 });
 
