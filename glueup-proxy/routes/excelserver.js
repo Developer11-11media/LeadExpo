@@ -11,7 +11,7 @@ router.use(helmet());
 // Endpoint para buscar ticket
 router.get("/ticket/:id", (req, res) => {
     try {
-        const filePath = path.join(process.cwd(), "server", "DataExcel", "GlupUpData.xlsx");
+        const filePath = path.join(process.cwd(), "glueup-proxy", "DataExcel", "GlupUpData.xlsx");
         const workbook = XLSX.readFile(filePath);
         const sheet = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
         const record = sheet.find(r => String(r["Ticket ID #"]) === req.params.id);
