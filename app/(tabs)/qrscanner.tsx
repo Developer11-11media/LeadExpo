@@ -4,14 +4,12 @@ import { Alert, Platform, View } from 'react-native';
 import { GetTicketFromExcel, Registerpotential_clients, validateProspect, validate_potential_clients } from "../../services/functionsDB";
 import { UserContext } from "../../services/UserContext";
 import SimpleQRScanner from '../SimpleQRScanner';
-
 export default function QRScannerTab() {
   const router = useRouter();
   const { user, loading: userLoading } = useContext(UserContext);
+
   const handleQRScanned = async (data: string) => {
     try {
-
-
       try {
 
         //Validamos que si es admin debe registrarlo en los ticket 
@@ -108,7 +106,7 @@ export default function QRScannerTab() {
           const iduser = Number(user?.id);
           //antes de registrar necesitamos validar que exista 
           const existingpotential= await validate_potential_clients(qrjson.idticket);
-
+         
           if (existingpotential.exists) {
              
               if (Platform.OS === 'web') {
@@ -124,7 +122,11 @@ export default function QRScannerTab() {
               iduser,
               user?.exhibitor_id,
             );
-
+            if (Platform.OS === 'web') {
+               window.alert('El código QR ya se registro.');
+              } else {
+                 Alert.alert('El código QR ya se registro.');
+              }
           }
           //Get api Glue Up
 
