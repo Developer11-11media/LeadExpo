@@ -1,7 +1,8 @@
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as Font from "expo-font";
 import { LinearGradient } from 'expo-linear-gradient';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Image } from 'react-native';
 import { User, UserContext } from "../services/UserContext";
@@ -78,7 +79,14 @@ const LoginScreen: React.FC<LoginScreenProps> = ({
 
   const { width } = useWindowDimensions();
   const mostrarImagen = width > 768;
-  
+
+  useEffect(() => {
+    Font.loadAsync({
+      ...Ionicons.font,
+      "Ionicons": "/fonts/Ionicons.ttf",
+    });
+  }, []);
+
   return (
     <LinearGradient colors={['#0f0f23', '#1a1a2e', '#16213e']} style={styles.container}>
       <SafeAreaView style={styles.safeArea}>
