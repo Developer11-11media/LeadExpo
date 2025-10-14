@@ -7,7 +7,10 @@
     "icon": "./assets/images/icon.png",
     "scheme": "leadexpo",
     "userInterfaceStyle": "automatic",
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*",
+      "node_modules/@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/*"
+    ],
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true
