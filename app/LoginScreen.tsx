@@ -83,7 +83,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({
   useEffect(() => {
     Font.loadAsync({
       ...Ionicons.font,
-      "Ionicons": "/fonts/Ionicons.ttf",
+      "Ionicons": "/fonts/Ionicons.b4eb097d35f44ed943676fd56f6bdc51.ttf",
     });
   }, []);
 
