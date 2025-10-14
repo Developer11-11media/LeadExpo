@@ -7,6 +7,7 @@
     "icon": "./assets/images/icon.png",
     "scheme": "leadexpo",
     "userInterfaceStyle": "automatic",
+    "assetBundlePatterns": ["**/*"],
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true
