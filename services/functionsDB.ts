@@ -2,9 +2,9 @@
 
 const UrlLocalApi = 'http://192.168.1.80:4000/';
 
-const UrlPro = '';
+const UrlPro = 'https://leadexpo-backend.onrender.com';
 
-const UrlApi = UrlLocalApi;
+const UrlApi = UrlPro;
 
 export async function registeraccounts(
   first_name: string, last_name: string, email: string, password: string, role: string, exhibitor_id: number) {
