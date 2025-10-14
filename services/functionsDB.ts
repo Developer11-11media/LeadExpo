@@ -1,7 +1,15 @@
+
+
+const UrlLocalApi = 'http://192.168.1.80:4000/';
+
+const UrlPro = '';
+
+const UrlApi = UrlLocalApi;
+
 export async function registeraccounts(
   first_name: string, last_name: string, email: string, password: string, role: string, exhibitor_id: number) {
   try {
-    const response = await fetch("http://192.168.1.80:4000/api/db/registeraccounts", {
+    const response = await fetch(UrlApi + "api/db/registeraccounts", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ first_name, last_name, email, password, role, exhibitor_id }),
@@ -24,7 +32,7 @@ export async function RegisterTicketdb(
   ticket_number_GlupUp: string | null, firstname: string, lastname: string, email: string, company: string | null, position_title: string | null,
   phone: string, ticketType: string, created_at: string, created_by: string) {
   try {
-    const response = await fetch("http://192.168.1.80:4000/api/db/registerticket", {
+    const response = await fetch( UrlApi + "api/db/registerticket", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -57,7 +65,7 @@ export async function RegisterTicketdb(
 export async function GetTicketFromExcel(ticketNumber: string) {
   try {
     const response = await fetch(
-      `http://192.168.1.80:4000/api/excel/ticket/${ticketNumber}`,
+      UrlApi + `api/excel/ticket/${ticketNumber}`,
       {
         method: "GET",
         headers: {
@@ -82,7 +90,7 @@ export async function GetTicketFromExcel(ticketNumber: string) {
 
 export async function validateProspect(email: string, phone: string) {
   try {
-    const response = await fetch("http://192.168.1.80:4000/api/db/validate-prospect", {
+    const response = await fetch(UrlApi + "api/db/validate-prospect", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, phone }),
@@ -98,7 +106,7 @@ export async function validateProspect(email: string, phone: string) {
 
 export async function ProspectsList() {
   try {
-    const response = await fetch("http://192.168.1.80:4000/api/db/list-prospects", {
+    const response = await fetch(UrlApi + "api/db/list-prospects", {
       method: "GET",
       headers: { "Content-Type": "application/json" },
     });
@@ -126,7 +134,7 @@ export async function registeraexhibitor(
   name: string, contact_firstname: string, contact_lastname: string, contact_phone: string, address: string, website: string,
   industry: string) {
   try {
-    const response = await fetch("http://192.168.1.80:4000/api/db/registerexhibitor", {
+    const response = await fetch(UrlApi + "api/db/registerexhibitor", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name, contact_firstname, contact_lastname, contact_phone, address, website, industry }),
@@ -147,7 +155,7 @@ export async function registeraexhibitor(
 
 export async function getexhibitors() {
   try {
-    const response = await fetch("http://192.168.1.80:4000/api/db/getexhibitor", {
+    const response = await fetch(UrlApi + "api/db/getexhibitor", {
        method: "GET",
       headers: { "Content-Type": "application/json" },
     });
@@ -170,7 +178,7 @@ export async function getexhibitors() {
 export async function ProspectsListexhibitors(email: string , exhibitor_id: number) {
   try {
     const response = await fetch(
-      `http://192.168.1.80:4000/api/db/ProspectsListexhibitors?exhibitor_id=${exhibitor_id}&email=${encodeURIComponent(email)}`,
+      UrlApi + `api/db/ProspectsListexhibitors?exhibitor_id=${exhibitor_id}&email=${encodeURIComponent(email)}`,
       {
         method: "GET",
         headers: { "Content-Type": "application/json" },
@@ -200,7 +208,7 @@ export async function ProspectsListexhibitors(email: string , exhibitor_id: numb
 
 export async function Registerpotential_clients(ticket_id : number = 0, user_id :number = 0 ,exhibitor_id: number = 0 ) {
   try {
-    const response = await fetch("http://192.168.1.80:4000/api/db/Registerpotential", {
+    const response = await fetch(UrlApi + "api/db/Registerpotential", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -226,7 +234,7 @@ export async function Registerpotential_clients(ticket_id : number = 0, user_id 
 export async function validate_potential_clients(ticket_id: number) {
   try {
     
-    const response = await fetch("http://192.168.1.80:4000/api/db/validate_potential_clients", {
+    const response = await fetch(UrlApi + "api/db/validate_potential_clients", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ ticket_id }),
