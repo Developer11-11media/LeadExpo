@@ -2,7 +2,7 @@
 
 const UrlLocalApi = 'http://192.168.1.80:4000/';
 
-const UrlPro = 'https://leadexpo-backend.onrender.com';
+const UrlPro = 'https://leadexpo-backend.onrender.com/';
 
 const UrlApi = UrlPro;
 
