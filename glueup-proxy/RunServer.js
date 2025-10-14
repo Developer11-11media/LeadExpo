@@ -9,6 +9,7 @@ app.use(express.json());
 
 app.use('/api/db', dbRoutes);
 app.use('/api/excel', excelRoutes);
+app.use("/DataExcel", express.static(path.join(process.cwd(), "DataExcel")));
 
 const PORT = 4000;
 app.listen(PORT, () => console.log(`Servidor corriendo en puerto ${PORT}`));
