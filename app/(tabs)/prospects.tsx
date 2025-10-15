@@ -13,6 +13,12 @@ export default function ProspectsTab() {
   const { user, loading: userLoading } = useContext(UserContext);
 
   useEffect(() => {
+    if (!user) {
+      router.replace('/login'); // redirige al login si no hay usuario
+    }
+  }, [user]);
+
+  useEffect(() => {
 
     const syncProspectsFromServer = async () => {
       try {
@@ -73,7 +79,7 @@ export default function ProspectsTab() {
       params: { showRole: 'true' }
     });
   };
-  
+
 
   const handleSettings = () => {
     // Navegar al formulario de registro manual

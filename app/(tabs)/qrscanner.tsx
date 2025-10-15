@@ -1,5 +1,5 @@
 import { useRouter } from 'expo-router';
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Alert, Platform, View } from 'react-native';
 import { GetTicketFromExcel, Registerpotential_clients, validateProspect, validate_potential_clients } from "../../services/functionsDB";
 import { UserContext } from "../../services/UserContext";
@@ -7,6 +7,7 @@ import QRScannerScreen from '../QRScannerScreen';
 export default function QRScannerTab() {
   const router = useRouter();
   const { user, loading: userLoading } = useContext(UserContext);
+
 
   const handleQRScanned = async (data: string) => {
     try {
@@ -106,55 +107,61 @@ export default function QRScannerTab() {
           const qrjson = JSON.parse(data);
           const iduser = Number(user?.id);
           //antes de registrar necesitamos validar que exista 
-          const existingpotential= await validate_potential_clients(qrjson.idticket);
-         
+          const existingpotential = await validate_potential_clients(qrjson.idticket);
+
           if (existingpotential.exists) {
-             
-              if (Platform.OS === 'web') {
-               window.alert('El código QR ya esta registrado.');
-              } else {
-                 Alert.alert('El código QR ya esta registrado.');
-              }
 
-              return;
-            }
-            await Registerpotential_clients(
-              qrjson.idticket,
-              iduser,
-              user?.exhibitor_id,
-            );
             if (Platform.OS === 'web') {
-               window.alert('El código QR ya se registro.');
-              } else {
-                 Alert.alert('El código QR ya se registro.');
-              }
+              window.alert('El código QR ya esta registrado.');
+            } else {
+              Alert.alert('El código QR ya esta registrado.');
+            }
+
+            return;
           }
-          //Get api Glue Up
-
-
-        } catch (error) {
-          console.error('Error llamando al proxy:', error);
+          await Registerpotential_clients(
+            qrjson.idticket,
+            iduser,
+            user?.exhibitor_id,
+          );
+          if (Platform.OS === 'web') {
+            window.alert('El código QR ya se registro.');
+          } else {
+            Alert.alert('El código QR ya se registro.');
+          }
         }
-        //Fin Get Api
+        //Get api Glue Up
+
 
       } catch (error) {
-        console.error('Error processing QR:', error);
-        //Implementar para las plaformas
-        if (Platform.OS === 'web') {
-          window.alert('No se pudo procesar el código QR. Intenta de nuevo.');
-        } else {
-          Alert.alert('Error', 'No se pudo procesar el código QR. Intenta de nuevo.');
-        }
-
+        console.error('Error llamando al proxy:', error);
       }
-    };
+      //Fin Get Api
 
-    return (
-      <View style={{ flex: 1 }}>
-        <QRScannerScreen
-          onQRScanned={handleQRScanned}
-          onBack={() => { }}
-        />
-      </View>
-    );
-  }
+    } catch (error) {
+      console.error('Error processing QR:', error);
+      //Implementar para las plaformas
+      if (Platform.OS === 'web') {
+        window.alert('No se pudo procesar el código QR. Intenta de nuevo.');
+      } else {
+        Alert.alert('Error', 'No se pudo procesar el código QR. Intenta de nuevo.');
+      }
+
+    }
+  };
+  
+  useEffect(() => {
+    if (!user) {
+      router.replace('/login'); // redirige al login si no hay usuario
+    }
+  }, [user]);
+
+  return (
+    <View style={{ flex: 1 }}>
+      <QRScannerScreen
+        onQRScanned={handleQRScanned}
+        onBack={() => { }}
+      />
+    </View>
+  );
+}

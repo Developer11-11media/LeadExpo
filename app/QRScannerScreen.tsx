@@ -59,7 +59,7 @@ const QRScannerScreen: React.FC<QRScannerScreenProps> = ({
       setHasPermission(false);
     }
   };
-
+  const [facingMode, setFacingMode] = useState<"user" | "environment">("user");
   useEffect(() => {
     getCameraPermissions();
   }, []);
@@ -160,8 +160,7 @@ const QRScannerScreen: React.FC<QRScannerScreenProps> = ({
   };
 
   const handleFlip = () => {
-    // Toggle between front and back camera if needed
-    // This would require additional state management for camera type
+     setFacingMode((prev) => (prev === "user" ? "environment" : "user"));
   };
 
   if (hasPermission === null) {
