@@ -1,5 +1,5 @@
 import { useRouter } from 'expo-router';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext } from 'react';
 import { Alert, Platform, View } from 'react-native';
 import { GetTicketFromExcel, Registerpotential_clients, validateProspect, validate_potential_clients } from "../../services/functionsDB";
 import { UserContext } from "../../services/UserContext";
@@ -7,19 +7,6 @@ import QRScannerScreen from '../QRScannerScreen';
 export default function QRScannerTab() {
   const router = useRouter();
   const { user, loading: userLoading } = useContext(UserContext);
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true); // marca que ya montamos
-  }, []);
-
-  useEffect(() => {
-    if (!mounted) return; // no navegamos hasta que esté montado
-    if (user === null) {
-      router.replace("/login");
-    }
-  }, [mounted, user]);
-
 
   const handleQRScanned = async (data: string) => {
     try {

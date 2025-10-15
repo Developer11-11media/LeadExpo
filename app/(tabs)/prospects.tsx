@@ -12,23 +12,17 @@ export default function ProspectsTab() {
   const [users, setUser] = useState<any>(null);
   const { user, loading: userLoading } = useContext(UserContext);
   const [mounted, setMounted] = useState(false);
-  
-  useEffect(() => {
-    setMounted(true); // marca que ya montamos
-  }, []);
-
-  useEffect(() => {
-    if (!mounted) return; // no navegamos hasta que esté montado
-    if (user === null) {
-      router.replace("/login");
-    }
-  }, [mounted, user]);
 
   useEffect(() => {
 
     const syncProspectsFromServer = async () => {
       try {
         if (!user) return;
+
+        if (user === null) {
+          router.replace("/login");
+        }
+
         //validamos el rol
         let remoteProspects;
         if (user && user.role === "admin") {
