@@ -29,6 +29,7 @@ export default function QRScannerWrapper() {
       onManualEntry={handleManualEntry}
       onBack={handleBack}
       exhibitorName="QRScan LDA"
+      isActive={false} 
     />
   );
 }

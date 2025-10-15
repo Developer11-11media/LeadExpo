@@ -24,15 +24,18 @@ interface QRScannerScreenProps {
   onManualEntry?: () => void;
   onBack?: () => void;
   exhibitorName?: string;
+  isActive: boolean;
 }
 
 const { width, height } = Dimensions.get('window');
 const scannerSize = width * 0.75;
 const router = useRouter();
+
 const QRScannerScreen: React.FC<QRScannerScreenProps> = ({
   onQRScanned,
   onManualEntry,
   onBack,
+  isActive = true,
   exhibitorName = "11/Media LLC"
 }) => {
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
@@ -43,6 +46,8 @@ const QRScannerScreen: React.FC<QRScannerScreenProps> = ({
   const [ticketInput, setTicketInput] = useState("");
   const [errors, setErrors] = useState<{ [key: string]: string | undefined }>({});
   const [loading, setLoading] = useState(false);
+  const [facingMode, setFacingMode] = useState<"user" | "environment">("user");
+  
   // Definir la función fuera para poder reutilizarla
   const getCameraPermissions = async () => {
     try {
@@ -59,11 +64,15 @@ const QRScannerScreen: React.FC<QRScannerScreenProps> = ({
       setHasPermission(false);
     }
   };
-  const [facingMode, setFacingMode] = useState<"user" | "environment">("user");
+  
   useEffect(() => {
     getCameraPermissions();
   }, []);
 
+  if (!isActive) {
+    return <View style={{ flex: 1, backgroundColor: "black" }} />;
+  }
+  
   const handlesearch = async () => {
     if (!ticketInput.trim()) {
       setErrors({ ticket: "Ingresa un ticket" });
@@ -162,6 +171,7 @@ const QRScannerScreen: React.FC<QRScannerScreenProps> = ({
   const handleFlip = () => {
      setFacingMode((prev) => (prev === "user" ? "environment" : "user"));
   };
+
 
   if (hasPermission === null) {
     return (

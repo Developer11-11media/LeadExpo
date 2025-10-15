@@ -1,13 +1,14 @@
-import { useRouter } from 'expo-router';
-import React, { useContext } from 'react';
-import { Alert, Platform, View } from 'react-native';
+import { useFocusEffect, useRouter } from 'expo-router';
+import React, { useContext, useState } from 'react';
+import { Alert, Platform, View, } from 'react-native';
 import { GetTicketFromExcel, Registerpotential_clients, validateProspect, validate_potential_clients } from "../../services/functionsDB";
 import { UserContext } from "../../services/UserContext";
 import QRScannerScreen from '../QRScannerScreen';
+
 export default function QRScannerTab() {
   const router = useRouter();
   const { user, loading: userLoading } = useContext(UserContext);
-
+   const [isActive, setIsActive] = useState(true);
   const handleQRScanned = async (data: string) => {
     try {
       try {
@@ -149,12 +150,23 @@ export default function QRScannerTab() {
     }
   };
 
+  useFocusEffect(
+      React.useCallback(() => {
+        // Cuando entra a la pantalla
+        setIsActive(true);
+        return () => {
+          // Cuando sale de la pantalla
+          setIsActive(false);
+        };
+      }, [])
+    );
 
   return (
     <View style={{ flex: 1 }}>
       <QRScannerScreen
         onQRScanned={handleQRScanned}
         onBack={() => { }}
+        isActive={isActive} 
       />
     </View>
   );
