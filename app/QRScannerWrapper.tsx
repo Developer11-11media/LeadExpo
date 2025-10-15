@@ -9,7 +9,7 @@ export default function QRScannerWrapper() {
   };
 
   const handleManualEntry = () => {
-    // For now, just navigate back
+    //Mandamos a llamar el modal
     router.back();
   };
 
@@ -28,7 +28,6 @@ export default function QRScannerWrapper() {
       onQRScanned={handleQRScanned}
       onManualEntry={handleManualEntry}
       onBack={handleBack}
-      onProspectSaved={handleProspectSaved}
       exhibitorName="QRScan LDA"
     />
   );

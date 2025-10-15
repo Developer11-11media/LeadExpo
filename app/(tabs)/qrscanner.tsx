@@ -3,7 +3,7 @@ import React, { useContext } from 'react';
 import { Alert, Platform, View } from 'react-native';
 import { GetTicketFromExcel, Registerpotential_clients, validateProspect, validate_potential_clients } from "../../services/functionsDB";
 import { UserContext } from "../../services/UserContext";
-import SimpleQRScanner from '../SimpleQRScanner';
+import QRScannerScreen from '../QRScannerScreen';
 export default function QRScannerTab() {
   const router = useRouter();
   const { user, loading: userLoading } = useContext(UserContext);
@@ -14,7 +14,7 @@ export default function QRScannerTab() {
 
         //Validamos que si es admin debe registrarlo en los ticket 
         if (user && user.role === "admin") {
-          if (!(typeof data === "string" && data.startsWith("http"))) {
+          if (!(typeof data === "string" && data.toLowerCase().startsWith("http"))) {
 
             if (Platform.OS === 'web') {
               window.alert(
@@ -31,6 +31,7 @@ export default function QRScannerTab() {
 
           const partes = data.split('/');
           const ticket = partes[partes.length - 1];
+
           const Excel = await GetTicketFromExcel(ticket);
 
           //Antes de crear el QR, Validamos
@@ -150,7 +151,7 @@ export default function QRScannerTab() {
 
     return (
       <View style={{ flex: 1 }}>
-        <SimpleQRScanner
+        <QRScannerScreen
           onQRScanned={handleQRScanned}
           onBack={() => { }}
         />

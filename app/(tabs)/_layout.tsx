@@ -9,6 +9,7 @@ export default function TabLayout() {
   const colorScheme = useColorScheme();
   const isDark = colorScheme === "dark";
   const { user } = useContext(UserContext);
+
   const activeColor = isDark ? "#7c3aed" : "#4f46e5";
   const inactiveColor = isDark ? "#aaa" : "#888";
 

@@ -208,7 +208,7 @@ router.get("/list-prospects", async (req, res) => {
   }
 });
 
-router.post("/registerexhibitor", async (req, res) => { 
+router.post("/registerexhibitor", async (req, res) => {
   const { name, contact_firstname, contact_lastname, contact_phone, address, website, industry } = req.body;
 
   try {
@@ -385,4 +385,110 @@ router.post("/validate_potential_clients", async (req, res) => {
     res.status(500).json({ message: "Error validate prospects" });
   }
 });
+
+router.post("/registerExcelData", async (req, res) => {
+  const data = req.body.data; // Esperamos un array de objetos
+
+  if (!data || !Array.isArray(data) || data.length === 0) {
+    return res.status(400).json({ message: "No data provided" });
+  }
+  try {
+    await pool.query("SET SQL_SAFE_UPDATES = 0");
+    await pool.query("DELETE FROM DataGlupUp");
+    await pool.query("ALTER TABLE DataGlupUp AUTO_INCREMENT = 1");
+
+    const sql = `
+      INSERT INTO DataGlupUp
+      (
+        ticket_id, contact_id, first_name, last_name, company, title, email, phone,
+        category, internal_note, internal_group, ticket_name, price_option,
+        registration_id, registration_date,
+        reg_contact_first_name, reg_contact_last_name, reg_contact_email, reg_contact_phone
+      )
+      VALUES ?
+    `;
+
+    // Convertir la fecha a formato MySQL y mapear valores
+    const values = data.map((row) => [
+      row.ticket_id || null,
+      row.contact_id || null,
+      row.first_name || null,
+      row.last_name || null,
+      row.company || null,
+      row.title || null,
+      row.email || null,
+      row.phone || null,
+      row.category || null,
+      row.internal_note || null,
+      row.internal_group || null,
+      row.ticket_name || null,
+      row.price_option || null,
+      row.registration_id || null,
+      row.registration_date
+        ? new Date(row.registration_date).toISOString().slice(0, 19).replace("T", " ")
+        : null,
+      row.reg_contact_first_name || null,
+      row.reg_contact_last_name || null,
+      row.reg_contact_email || null,
+      row.reg_contact_phone || null,
+    ]);
+
+    await pool.query(sql, [values]);
+
+    res.json({ message: "Data inserted successfully", inserted: values.length });
+  } catch (err) {
+    console.error("Error inserting Excel data:", err);
+    res.status(500).json({ message: "Error inserting Excel data", error: err.message });
+  }
+});
+
+router.get("/DataGlupUp/:ticket_id", async (req, res) => {
+  try {
+    const { ticket_id } = req.params;
+
+    if (!ticket_id) {
+      return res.status(400).json({ message: "ticket_id es requerido" });
+    }
+
+    const sql = `
+
+      SELECT 
+  ticket_id AS ticket_number_GlupUp,
+  first_name AS firstname,
+  last_name AS lastname,
+  Phone AS phone,
+  Company AS company,
+  title AS employee,
+  Email AS email,
+  ticket_name AS type_ticket
+FROM DataGlupUp
+WHERE ticket_id = ?
+LIMIT 1;
+    `;
+
+    const [rows] = await pool.execute(sql, [ticket_id]);
+
+    if (!rows || rows.length === 0) {
+      return res.status(404).json({ message: "No se encontró el ticket" });
+    }
+
+    const record = rows[0];
+
+    res.status(200).json({
+      ticket_number_GlupUp: record.ticket_number_GlupUp,
+      firstname: record.firstname,
+      lastname: record.lastname,
+      phone: record.phone,
+      company: record.company,
+      employee: record.employee,
+      email: record.email,
+      type_ticket: record.type_ticket
+    });
+  } catch (err) {
+    console.error("Error get DataGlupUp:", err);
+    res.status(500).json({ message: "Error al obtener DataGlupUp" });
+  }
+});
+
+
 export default router;

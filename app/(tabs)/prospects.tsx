@@ -66,6 +66,15 @@ export default function ProspectsTab() {
     });
   };
 
+  const handleonAddUploadExcel = () => {
+    // Navegar al formulario de registro manual
+    router.push({
+      pathname: '/UploadExcelScreen',
+      params: { showRole: 'true' }
+    });
+  };
+  
+
   const handleSettings = () => {
     // Navegar al formulario de registro manual
     router.push({
@@ -180,6 +189,7 @@ export default function ProspectsTab() {
       <ProspectsListScreen
         onProspectSelect={handleProspectSelect}
         onAddRegisterTicket={handleAddRegisterTicket}
+        onAddUploadExcel={handleonAddUploadExcel}
         onSettings={handleSettings}
         onScanQR={handleScanQR}
         onExportAll={handleExportAll}

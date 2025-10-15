@@ -65,7 +65,7 @@ export async function RegisterTicketdb(
 export async function GetTicketFromExcel(ticketNumber: string) {
   try {
     const response = await fetch(
-      UrlApi + `api/excel/ticket/${ticketNumber}`,
+      UrlApi + `api/db/DataGlupUp/${encodeURIComponent(ticketNumber)}`,
       {
         method: "GET",
         headers: {
@@ -122,8 +122,6 @@ export async function ProspectsList() {
       console.warn("Respuesta inesperada del servidor:", data);
       return [];
     }
-
-    console.log(`${data.length} prospectos cargados desde la base de datos`);
     return data;
   } catch (error) {
     console.error("Error al obtener prospectos:", error);
@@ -197,8 +195,6 @@ export async function ProspectsListexhibitors(email: string , exhibitor_id: numb
       console.warn("Respuesta inesperada del servidor:", data);
       return [];
     }
-
-    console.log(`${data.length} prospectos cargados desde la base de datos`);
     return data;
   } catch (error) {
     console.error("Error al obtener prospectos:", error);
@@ -245,5 +241,26 @@ export async function validate_potential_clients(ticket_id: number) {
   } catch (error) {
     console.error("Error al validar prospecto:", error);
     return { exists: false };
+  }
+}
+
+export async function registerExcelData(data: any[]) {
+  try {
+    const response = await fetch(UrlApi + "api/db/registerExcelData", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ data }), // enviamos el array completo
+    });
+
+    const resData = await response.json();
+
+    if (!response.ok) {
+      throw new Error(resData.message || "Error al registrar los datos del Excel");
+    }
+
+    return resData; // { message: "Data inserted successfully", inserted: N }
+  } catch (err) {
+    console.error("Error al registrar Excel data:", err);
+    throw err;
   }
 }

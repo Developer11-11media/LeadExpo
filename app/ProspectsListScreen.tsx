@@ -24,6 +24,7 @@ import { Prospect, RegistrationType } from '../types/prospect';
 interface ProspectsListScreenProps {
   onProspectSelect?: (prospectId: string) => void;
   onAddRegisterTicket?: () => void;
+  onAddUploadExcel?: () => void;
   onSettings?: () => void;
   onScanQR?: () => void;
   onExportAll?: () => void;
@@ -33,13 +34,13 @@ interface ProspectsListScreenProps {
 const ProspectsListScreen: React.FC<ProspectsListScreenProps> = ({
   onProspectSelect,
   onAddRegisterTicket,
+  onAddUploadExcel,
   onSettings,
   onScanQR,
   onExportAll,
   onLogout
 }) => {
   const { user, loading: userLoading } = useContext(UserContext);
-  console.log("User desde Context:", user);
   const [prospects, setProspects] = useState<Prospect[]>([]);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
@@ -55,7 +56,7 @@ const ProspectsListScreen: React.FC<ProspectsListScreenProps> = ({
 
   const loadProspects = useCallback(async () => {
     try {
-      
+
       setLoading(true);
 
       if (!user) return;
@@ -67,17 +68,17 @@ const ProspectsListScreen: React.FC<ProspectsListScreenProps> = ({
         remoteProspects = await ProspectsListexhibitors(user?.email ?? "", user?.exhibitor_id ?? 0);
       }
       setProspects([]);
-      console.log(remoteProspects);
+
       const formatted: Prospect[] = remoteProspects.map((r: any) => ({
         id: r.id?.toString() || Math.random().toString(),
-        firstname: r.firstname || 'Sin nombre',
-        lastname: r.last_name || 'Sin nombre',
-        email: r.email || '',
-        phone: r.phone || '',
-        company: r.company || '',
-        position: r.position || '',
-        registrationType: r.type_ticket || 'Other',
-        createdAt: r.created_at || new Date().toISOString(),
+        firstname: r.firstname ?? 'Sin firstname',
+        lastname: r.lastname ?? 'Sin lastname',
+        email: r.email ?? '',
+        phone: r.phone ?? '',
+        company: r.company ?? '',
+        position: r.position ?? '',
+        registrationType: r.type_ticket ?? 'Other',
+        createdAt: r.created_at ?? new Date().toISOString(),
         isStarred: false,
       }));
 
@@ -133,25 +134,23 @@ const ProspectsListScreen: React.FC<ProspectsListScreenProps> = ({
         }
 
         const formatted: Prospect[] = remoteProspects.map((r: any) => ({
-          id: r.id?.toString() || Math.random().toString(),
-          firstname: r.firstname || 'Sin nombre',
-          lastname: r.last_name || 'Sin nombre',
-          email: r.email || '',
-          phone: r.phone || '',
-          company: r.company || '',
-          position: r.position || '',
-          registrationType: r.type_ticket || 'Other',
-          createdAt: r.created_at || new Date().toISOString(),
-          isStarred: false,
-        }));
+        id: r.id?.toString() || Math.random().toString(),
+        firstname: r.firstname ?? 'Sin firstname',
+        lastname: r.lastname ?? 'Sin lastname',
+        email: r.email ?? '',
+        phone: r.phone ?? '',
+        company: r.company ?? '',
+        position: r.position ?? '',
+        registrationType: r.type_ticket ?? 'Other',
+        createdAt: r.created_at ?? new Date().toISOString(),
+        isStarred: false,
+      }));
 
         setProspects(formatted);
         setStats({
           total: formatted.length,
           recentCount: formatted.length,
         });
-
-        console.log(`Prospectos cargados: ${formatted.length}`);
       } catch (error) {
         console.error("Error al cargar prospectos:", error);
         Alert.alert("Error", "No se pudieron obtener los prospectos del servidor");
@@ -173,19 +172,19 @@ const ProspectsListScreen: React.FC<ProspectsListScreenProps> = ({
     } else {
       remoteProspects = await ProspectsListexhibitors(user?.email ?? "", user?.exhibitor_id ?? 0);
     }
-     setProspects([]);
+    setProspects([]);
     const formatted: Prospect[] = remoteProspects.map((r: any) => ({
-      id: r.id?.toString() || Math.random().toString(),
-      firstname: r.firstname || 'Sin nombre',
-      lastname: r.last_name || 'Sin nombre',
-      email: r.email || '',
-      phone: r.phone || '',
-      company: r.company || '',
-      position: r.position || '',
-      registrationType: r.type_ticket || 'Other',
-      createdAt: r.created_at || new Date().toISOString(),
-      isStarred: false,
-    }));
+        id: r.id?.toString() || Math.random().toString(),
+        firstname: r.firstname ?? 'Sin firstname',
+        lastname: r.lastname ?? 'Sin lastname',
+        email: r.email ?? '',
+        phone: r.phone ?? '',
+        company: r.company ?? '',
+        position: r.position ?? '',
+        registrationType: r.type_ticket ?? 'Other',
+        createdAt: r.created_at ?? new Date().toISOString(),
+        isStarred: false,
+      }));
 
     setProspects(formatted);
     setRefreshing(false);
@@ -215,7 +214,6 @@ const ProspectsListScreen: React.FC<ProspectsListScreenProps> = ({
 
   };
   const badge = (prospect: Prospect) => {
-    console.log(prospect);
 
     router.push({
       pathname: "/PreviewBadge.modal",
@@ -507,6 +505,13 @@ const ProspectsListScreen: React.FC<ProspectsListScreenProps> = ({
               onPress={onAddRegisterTicket}
             >
               <Ionicons name="ticket-outline" size={24} color="white" />
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.fabSecondary}
+              onPress={onAddUploadExcel}
+            >
+              <Ionicons name="attach-outline" size={24} color="white" />
             </TouchableOpacity>
 
             <TouchableOpacity
