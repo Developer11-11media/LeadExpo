@@ -11,12 +11,18 @@ export default function ProspectsTab() {
   const router = useRouter();
   const [users, setUser] = useState<any>(null);
   const { user, loading: userLoading } = useContext(UserContext);
+  const [mounted, setMounted] = useState(false);
+  
+  useEffect(() => {
+    setMounted(true); // marca que ya montamos
+  }, []);
 
   useEffect(() => {
-    if (!user) {
-      router.replace('/login'); // redirige al login si no hay usuario
+    if (!mounted) return; // no navegamos hasta que esté montado
+    if (user === null) {
+      router.replace("/login");
     }
-  }, [user]);
+  }, [mounted, user]);
 
   useEffect(() => {
 
