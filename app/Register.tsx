@@ -24,7 +24,7 @@ interface RegisterData {
     employee: string;
     phone: string;
     email: string;
-    ticketType: "GENERAL" | "VIP" | "EXHIBITOR" | "OTHER";
+    ticketType: "GENERAL";
     otherTicket: string;
 
 }
@@ -90,13 +90,6 @@ const Register: React.FC = () => {
     const handleRegister = async () => {
         if (validateForm()) {
             // Validación extra para ticket OTHER
-            if (formData.ticketType === "OTHER" && !formData.otherTicket.trim()) {
-                setErrors(prev => ({
-                    ...prev,
-                    otherTicket: "Please specify your ticket type",
-                }));
-                return;
-            }
 
             try {
                 setLoading(true);
@@ -110,9 +103,9 @@ const Register: React.FC = () => {
                     formData.company,
                     formData.employee,
                     formData.phone,
-                    formData.ticketType === "OTHER" ? formData.otherTicket ?? "" : formData.ticketType,
+                    formData.ticketType,
                     "",
-                    ""
+                    "Attendee"
                 );
 
                 // Aquí ya puedes generar el QR con los datos registrados

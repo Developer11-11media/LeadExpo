@@ -80,11 +80,10 @@ export default function PreviewBadgeModal() {
         if (!win) return;
 
         win.document.write(`
-        <!DOCTYPE html>
-<html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+          <!DOCTYPE html>
+               <html lang="es">
+               <head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+                   <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Imprimir Badge</title>
     <style>
       @page {
@@ -94,10 +93,10 @@ export default function PreviewBadgeModal() {
 
       body {
         margin: 0;
-        padding: 0;
+        padding:0; 
         display: flex;
         justify-content: center;
-        align-items: center;
+        align-items: flex-start;
         background: white;
       }
 
@@ -105,12 +104,11 @@ export default function PreviewBadgeModal() {
         width: 4in;
         height: 6in;
         background: white;
-        border: 2px solid black;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
         align-items: center;
-        padding: 20px;
+        padding: 10px;
         box-sizing: border-box;
         font-family: Arial, sans-serif;
       }
@@ -167,36 +165,33 @@ export default function PreviewBadgeModal() {
     </style>
   </head>
   <body>
-    <div class="badge">
+    <div class="badge" style="
+    padding-top: 0.25in;
+">
       <!-- fila superior -->
       <div class="top-row">
-        <img src="${imgnahica}" alt="Logo" style="width:150px;" />
-        <img src="${qrDataUrl}" alt="Código QR" style="width:120px; height:120px;" />
+        <img src="https://leads.expocontratista.com/img/Expo2025.png" alt="Logo" style="width: 100%;">
       </div>
 
       <!-- datos centrados -->
-      <div class="info">
+      <div class="info" style="
+    position: relative;
+    top: 0px;
+    bottom: 0px;
+">
         <div class="name">${ticketData.firstname + " " + ticketData.lastname}</div>
         <div class="company">${ticketData.company || ""}</div>
         <div class="position">${ticketData.position_title || ""}</div>
         <div class="type">${ticketData.type_ticket}</div>
+
       </div>
-
-      <!-- divider arriba del logo -->
-      <div class="divider"></div>
-
+              <img src="${qrDataUrl}" alt="Código QR" style="position: relative;width: 145px;height: 145px;top: -26px;">
       <!-- logo inferior -->
-      <img class="sponsor" src="${imgsponser}" alt="Patrocinador" />
+      <img class="sponsor" src="https://leads.expocontratista.com/img/Sponsors-01-01.png" alt="Patrocinador" style="
+    position: relative;
+    top: -14px;
+">
     </div>
-
-    <script>
-      window.onload = () => {
-        window.print();
-      };
-    </script>
-  </body>
-</html>
-
       `);
 
         win.document.close();

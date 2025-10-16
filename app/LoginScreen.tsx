@@ -88,7 +88,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({
   }, []);
 
   return (
-    <LinearGradient colors={['#0f0f23', '#1a1a2e', '#16213e']} style={styles.container}>
+    <LinearGradient colors={['#000000ff', '#000000ff', '#000000ff']} style={styles.container}>
       <SafeAreaView style={styles.safeArea}>
 
 
@@ -98,7 +98,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({
 
               <Image
                 className="imagen-responsive"
-                source={require("../assets/images/connect.jpg")}
+                source={require("../assets/images/connect.png")}
                 style={styles.Image}
                 resizeMode="cover"
               />
@@ -161,7 +161,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({
 
               {/* LOGIN BUTTON */}
               <TouchableOpacity style={styles.loginButton} onPress={handleLogin} disabled={isLoading}>
-                <LinearGradient colors={['#7c3aed', '#a855f7']} style={styles.loginButtonGradient}>
+                <LinearGradient colors={['rgba(240, 182, 28, 1)', 'rgba(240, 182, 28, 1)']} style={styles.loginButtonGradient}>
                   {isLoading ? (
                     <ActivityIndicator color="white" />
                   ) : (
@@ -222,12 +222,12 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 32,
     fontWeight: 'bold',
-    color: 'white',
+    color: 'rgb(240, 182, 28)',
     marginBottom: 8,
   },
   subtitle: {
     fontSize: 16,
-    color: '#8b9dc3',
+    color: 'rgb(240, 182, 28)',
     textAlign: 'center',
     lineHeight: 24,
   },
@@ -308,7 +308,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   signUpText: {
-    color: '#a855f7',
+    color: 'rgb(240, 182, 28)',
     fontSize: 16,
     fontWeight: '600',
   },
