@@ -6,8 +6,8 @@
     "password": "Contraseña",
     "forgot": "¿Olvidaste tu contraseña?",
     "button": "Iniciar sesión",
-    "noAccount": "¿No tienes una cuenta?",
-    "signup": "Regístrate"
+    "noAccount": "¿No tienes un ticket? ",
+    "signup": "Registra tu ticket"
   },
   "errors": {
     "emailRequired": "El correo es obligatorio",

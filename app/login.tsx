@@ -6,7 +6,7 @@ export default function Login() {
   return (
     <LoginScreen
       onLogin={() => router.replace('/(tabs)/prospects')}
-      onNavigateToRegister={() => router.push('/RegisterScreen')}
+      onNavigateToRegister={() => router.push('/Register')}
     />
   );
 }

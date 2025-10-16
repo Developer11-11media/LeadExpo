@@ -176,20 +176,20 @@ const LoginScreen: React.FC<LoginScreenProps> = ({
             */}
             </View>
 
-            {/* FOOTER 
-          <View style={styles.footer}>
-            <Text style={styles.footerText}>{t('login.noAccount')} </Text>
-            <TouchableOpacity onPress={onNavigateToRegister}>
-              <Text style={styles.signUpText}>{t('login.signup')}</Text>
-            </TouchableOpacity>
-          </View>
-         */}
+            {/* FOOTER  */}
+            <View style={styles.footer}>
+              <Text style={styles.footerText}>{t('login.noAccount')} </Text>
+              <TouchableOpacity onPress={onNavigateToRegister}>
+                <Text style={styles.signUpText}>{t('login.signup')}</Text>
+              </TouchableOpacity>
+            </View>
+
             {/* CAMBIO DE IDIOMA */}
-            <TouchableOpacity onPress={toggleLanguage} style={{ marginTop: 20, alignSelf: 'center' }}>
+            {/* <TouchableOpacity onPress={toggleLanguage} style={{ marginTop: 20, alignSelf: 'center' }}>
               <Text style={{ color: '#a855f7' }}>
                 {i18n.language === 'en' ? 'Cambiar a Español' : 'Switch to English'}
               </Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
         </View>
       </SafeAreaView>

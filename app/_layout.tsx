@@ -29,6 +29,7 @@ export default function RootLayout() {
               <Stack.Screen name="login" options={{ headerShown: false }} />
               <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
                <Stack.Screen name="SimpleQRScanner" options={{ headerShown: false }} />
+               <Stack.Screen name="Register" options={{ headerShown: false }} /> 
               {/* Rutas normales */}
                {/* Modales flotantes */}
               <Stack.Screen

@@ -6,8 +6,8 @@
     "password": "Password",
     "forgot": "Forgot password?",
     "button": "Login",
-    "noAccount": "Don't have an account?",
-    "signup": "Sign up"
+    "noAccount": "Don't have a ticket?",
+    "signup": "Register your ticket"
   },
   "errors": {
     "emailRequired": "Email is required",

@@ -29,7 +29,7 @@ interface RegisterData {
 
 }
 
-const RegisterTicket: React.FC = () => {
+const Register: React.FC = () => {
     const router = useRouter();
     const glob = useGlobalSearchParams();
 
@@ -259,7 +259,7 @@ const RegisterTicket: React.FC = () => {
                             {errors.email && <Text style={styles.errorText}>{errors.email}</Text>}
                         </View>
                         <View style={styles.inputContainer}>
-                            <Text style={styles.label}>Ticket Type</Text>
+                            {/* <Text style={styles.label}>Ticket Type</Text>
                             <View style={styles.radioGroup}>
                                 {ticketOptions.map((option) => (
                                     <TouchableOpacity
@@ -276,10 +276,10 @@ const RegisterTicket: React.FC = () => {
                                         <Text style={{ color: "white" }}>{option.label}</Text>
                                     </TouchableOpacity>
                                 ))}
-                            </View>
+                            </View> */}
 
                             {/* 👉 El campo de texto aparece solo si elige "Other" */}
-                            {formData.ticketType === "OTHER" && (
+                            {/* {formData.ticketType === "OTHER" && (
                                 <View style={styles.inputContainer}>
                                     <Text style={styles.label}>Specify Ticket Type</Text>
                                     <TextInput
@@ -290,7 +290,7 @@ const RegisterTicket: React.FC = () => {
                                         onChangeText={(text) => updateFormData("otherTicket", text)}
                                     />
                                 </View>
-                            )}
+                            )} */}
                         </View>
 
                         {/* Botón */}
@@ -355,4 +355,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default RegisterTicket;
+export default Register;
