@@ -10,9 +10,15 @@ import ProspectsListScreen from '../ProspectsListScreen';
 export default function ProspectsTab() {
   const router = useRouter();
   const [users, setUser] = useState<any>(null);
-  const { user, loading: userLoading } = useContext(UserContext);
+  const { user, loading: userLoading ,logout} = useContext(UserContext);
   const [mounted, setMounted] = useState(false);
 
+   useEffect(() => {
+
+    if (!userLoading && !user) {
+      router.replace("/login"); // Redirige al login si no hay usuario
+    }
+  },[user, userLoading]);
   useEffect(() => {
 
     const syncProspectsFromServer = async () => {
@@ -58,7 +64,7 @@ export default function ProspectsTab() {
       }
     };
     syncProspectsFromServer();
-  }, [user]);
+  }, [user,userLoading]);
 
 
 
@@ -105,6 +111,7 @@ export default function ProspectsTab() {
   const handleLogout = () => {
     const logoutAction = async () => {
       try {
+        await logout();
         router.replace('/');
       } catch (error) {
         console.error('Error al cerrar sesión:', error);

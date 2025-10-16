@@ -40,7 +40,7 @@ const ProspectsListScreen: React.FC<ProspectsListScreenProps> = ({
   onExportAll,
   onLogout
 }) => {
-  const { user, loading: userLoading } = useContext(UserContext);
+  const { user, loading: userLoading, logout} = useContext(UserContext);
   const [prospects, setProspects] = useState<Prospect[]>([]);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
@@ -54,6 +54,12 @@ const ProspectsListScreen: React.FC<ProspectsListScreenProps> = ({
     'All', 'VIP', 'General', 'Speaker', 'Press', 'Staff', 'Sponsor', 'Other'
   ];
 
+    useEffect(() => {
+
+    if (!userLoading && !user) {
+      router.replace("/login"); // Redirige al login si no hay usuario
+    }
+  },[user, userLoading]);
   const loadProspects = useCallback(async () => {
     try {
 
