@@ -525,7 +525,7 @@ WHERE email = ?
 LIMIT 1;
     `;
 
-    const [rows] = await pool.execute(sql, [ticket_id]);
+    const [rows] = await pool.execute(sql, [email]);
 
     if (!rows || rows.length === 0) {
       return res.status(404).json({ message: "No se encontró el ticket" });
