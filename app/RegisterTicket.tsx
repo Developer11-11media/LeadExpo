@@ -13,7 +13,6 @@ import {
     View,
 } from "react-native";
 
-import { RegisterTicketdb } from "../services/functionsDB";
 
 // Importa tu función para guardar en la BD
 
@@ -101,33 +100,27 @@ const RegisterTicket: React.FC = () => {
             try {
                 setLoading(true);
 
-                // Llamada al backend
-                await RegisterTicketdb(
-                    "",
-                    formData.firstName,
-                    formData.lastname,
-                    formData.email,
-                    formData.company,
-                    formData.employee,
-                    formData.phone,
-                    formData.ticketType === "OTHER" ? formData.otherTicket ?? "" : formData.ticketType,
-                    "",
-                    ""
-                );
+
 
                 // Aquí ya puedes generar el QR con los datos registrados
 
                 router.push({
                     pathname: "/PreviewBadge.modal",
                     params: {
-                        full_name: formData.firstName + " " + formData.lastname,
+                        dticket: 0,
+                        ticket_number_GlupUp: 0,
+                        firstname: formData.firstName,
+                        lastname: formData.lastname,
                         email: formData.email,
                         company: formData.company,
                         position_title: formData.employee,
                         phone_number: formData.phone,
                         type_ticket: formData.ticketType,
+                        registres: 'false'
                     },
                 });
+
+            
 
 
             } catch (error) {

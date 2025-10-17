@@ -187,7 +187,7 @@ export default function PreviewBadgeModal() {
          <div 
     class="ticket-type-bar" 
     style="
-      background-color: #7c3aed; /* Color según tipo de ticket */
+      background-color: #183999; /* Color según tipo de ticket */
       width: 100%;
       height: 30px;
       display: flex;
@@ -196,7 +196,7 @@ export default function PreviewBadgeModal() {
       border-radius: 5px;
     "
   >
-        <div class="type">${ticketData.type_ticket}</div>
+        <div style="color: white" class="type">${ticketData.type_ticket}</div>
  </div>
       </div>
               <img src="${qrDataUrl}" alt="Código QR" style="position: relative;width: 145px;height: 145px;top: -26px;">
