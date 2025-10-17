@@ -264,3 +264,30 @@ export async function registerExcelData(data: any[]) {
     throw err;
   }
 }
+
+export async function GetDataTicket(email: string) {
+  try {
+    const cleanEmail = email.replace(/^"|"$/g, "");
+    const response = await fetch(
+      UrlApi + `api/db/DataTicket/${encodeURIComponent(cleanEmail)}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer TU_TOKEN_SEGURIDAD", // No eh difinido aun el token
+        },
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || "No se encontró informaicon con el ticket");
+    }
+
+    return data;
+  } catch (err) {
+    console.error("Error al consultar el data:", err);
+    throw err;
+  }
+}

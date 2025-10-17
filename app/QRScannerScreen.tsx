@@ -17,7 +17,7 @@ import {
   TouchableOpacity,
   View
 } from 'react-native';
-import { GetTicketFromExcel, validateProspect } from "../services/functionsDB";
+import { GetDataTicket, GetTicketFromExcel, validateProspect } from "../services/functionsDB";
 
 interface QRScannerScreenProps {
   onQRScanned?: (data: string) => void;
@@ -47,7 +47,7 @@ const QRScannerScreen: React.FC<QRScannerScreenProps> = ({
   const [errors, setErrors] = useState<{ [key: string]: string | undefined }>({});
   const [loading, setLoading] = useState(false);
   const [facingMode, setFacingMode] = useState<"user" | "environment">("user");
-  
+
   // Definir la función fuera para poder reutilizarla
   const getCameraPermissions = async () => {
     try {
@@ -64,7 +64,7 @@ const QRScannerScreen: React.FC<QRScannerScreenProps> = ({
       setHasPermission(false);
     }
   };
-  
+
   useEffect(() => {
     getCameraPermissions();
   }, []);
@@ -72,87 +72,109 @@ const QRScannerScreen: React.FC<QRScannerScreenProps> = ({
   if (!isActive) {
     return <View style={{ flex: 1, backgroundColor: "black" }} />;
   }
-  
+
   const handlesearch = async () => {
     if (!ticketInput.trim()) {
       setErrors({ ticket: "Ingresa un ticket" });
       return;
     }
     try {
-    const searchticket = await GetTicketFromExcel(ticketInput);
+      setLoading(true);
+      if (typeof ticketInput === "string" && ticketInput.includes("@")) {
+        const datatickes = await GetDataTicket(ticketInput);
 
-    const hasValidName = (searchticket.firstname || searchticket.lastname) &&
-      ((searchticket.firstname?.trim().length || 0) > 0 || (searchticket.lastname?.trim().length || 0) > 0);
-    const hasValidEmail = searchticket.email && searchticket.email.includes('@');
-
-    if (!hasValidName && !hasValidEmail) {
-
-      if (Platform.OS === 'web') {
-        window.alert('El código QR no contiene información suficiente (nombre o email). Intenta con un QR que contenga datos de contacto.');
-      } else {
-        Alert.alert('QR Insuficiente', 'El código QR no contiene información suficiente (nombre o email). Intenta con un QR que contenga datos de contacto.');
-      }
-      return;
-    }
-    // Verificar si el prospecto ya existe (solo si tenemos email o teléfono)
-    if (searchticket.email || searchticket.phone) {
-      const existingProspects = await validateProspect(searchticket.email, searchticket.phone);
-
-      if (existingProspects.exists) {
-        const p = existingProspects.prospect;
-        const existingName = `${p.firstname || ""} ${p.lastname || ""}`.trim();
-
-        if (Platform.OS === 'web') {
-          if (window.confirm(`Este prospecto ya está registrado: ${existingName}\n\n¿Quieres ver los detalles?`)) {
-            router.push({
-              pathname: '/prospect-detail',
-              params: { prospectId: existingProspects.id }
-            });
-          }
-        } else {
-          Alert.alert(
-            'Prospecto Existente',
-            `Este prospecto ya está registrado: ${existingName}`,
-            [
-              {
-                text: 'Ver Detalles', onPress: () => {
-                  router.push({
-                    pathname: '/prospect-detail',
-                    params: { prospectId: existingProspects.id }
-                  });
-                }
-              },
-              { text: 'Cancelar', style: 'cancel' }
-            ]
-          );
-        }
-
+        router.push({
+          pathname: "/PreviewBadge.modal",
+          params: {
+            idticket: 0,
+            ticket_number_GlupUp: datatickes.ticket_number_GlupUp,
+            firstname: datatickes.firstname,
+            lastname: datatickes.lastname,
+            email: datatickes.email,
+            company: datatickes.company,
+            position_title: datatickes.employee,
+            phone_number: datatickes.phone,
+            type_ticket: datatickes.type_ticket,
+            registres: 'true'
+          },
+        });
         return;
       }
-    }
+      const searchticket = await GetTicketFromExcel(ticketInput);
 
-    //Hacemos QR
-    router.push({
-      pathname: "/PreviewBadge.modal",
-      params: {
-        idticket: 0,
-        ticket_number_GlupUp: ticketInput,
-        firstname: searchticket.firstname,
-        lastname: searchticket.lastname,
-        email: searchticket.email,
-        company: searchticket.company,
-        position_title: searchticket.employee,
-        phone_number: searchticket.phone,
-        type_ticket: searchticket.type_ticket,
-      },
-    });
-    setShowshowmodalmanual(false);
+      const hasValidName = (searchticket.firstname || searchticket.lastname) &&
+        ((searchticket.firstname?.trim().length || 0) > 0 || (searchticket.lastname?.trim().length || 0) > 0);
+      const hasValidEmail = searchticket.email && searchticket.email.includes('@');
+
+      if (!hasValidName && !hasValidEmail) {
+
+        if (Platform.OS === 'web') {
+          window.alert('El código QR no contiene información suficiente (nombre o email). Intenta con un QR que contenga datos de contacto.');
+        } else {
+          Alert.alert('QR Insuficiente', 'El código QR no contiene información suficiente (nombre o email). Intenta con un QR que contenga datos de contacto.');
+        }
+        return;
+      }
+      // Verificar si el prospecto ya existe (solo si tenemos email o teléfono)
+      if (searchticket.email || searchticket.phone) {
+        const existingProspects = await validateProspect(searchticket.email, searchticket.phone);
+
+        if (existingProspects.exists) {
+          const p = existingProspects.prospect;
+          const existingName = `${p.firstname || ""} ${p.lastname || ""}`.trim();
+
+          if (Platform.OS === 'web') {
+            if (window.confirm(`Este prospecto ya está registrado: ${existingName}\n\n¿Quieres ver los detalles?`)) {
+              router.push({
+                pathname: '/prospect-detail',
+                params: { prospectId: existingProspects.id }
+              });
+            }
+          } else {
+            Alert.alert(
+              'Prospecto Existente',
+              `Este prospecto ya está registrado: ${existingName}`,
+              [
+                {
+                  text: 'Ver Detalles', onPress: () => {
+                    router.push({
+                      pathname: '/prospect-detail',
+                      params: { prospectId: existingProspects.id }
+                    });
+                  }
+                },
+                { text: 'Cancelar', style: 'cancel' }
+              ]
+            );
+          }
+
+          return;
+        }
+      }
+
+      //Hacemos QR
+      router.push({
+        pathname: "/PreviewBadge.modal",
+        params: {
+          idticket: 0,
+          ticket_number_GlupUp: ticketInput,
+          firstname: searchticket.firstname,
+          lastname: searchticket.lastname,
+          email: searchticket.email,
+          company: searchticket.company,
+          position_title: searchticket.employee,
+          phone_number: searchticket.phone,
+          type_ticket: searchticket.type_ticket,
+          registres: 'false',
+        },
+      });
+      setShowshowmodalmanual(false);
     } catch (err) {
-    console.error(err);
-    alert("Error al buscar el ticket");
-  } finally {
-    setLoading(false);
-  }
+      console.error(err);
+      alert("Error al buscar el ticket");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleBarCodeScanned = ({ type, data }: { type: string; data: string }) => {
@@ -169,7 +191,7 @@ const QRScannerScreen: React.FC<QRScannerScreenProps> = ({
   };
 
   const handleFlip = () => {
-     setFacingMode((prev) => (prev === "user" ? "environment" : "user"));
+    setFacingMode((prev) => (prev === "user" ? "environment" : "user"));
   };
 
 
@@ -277,12 +299,12 @@ const QRScannerScreen: React.FC<QRScannerScreenProps> = ({
         </View>
 
         {/* Controls */}
-        <View style={styles.controls}>
+        {/* <View style={styles.controls}>
           <TouchableOpacity onPress={handleFlip} style={styles.controlButton}>
             <Ionicons name="camera-reverse-outline" size={24} color="white" />
             <Text style={styles.controlButtonText}>Flip</Text>
           </TouchableOpacity>
-        </View>
+        </View> */}
 
         {/* Manual Entry Button */}
         <TouchableOpacity onPress={() => setShowshowmodalmanual(true)} style={styles.manualButton}>

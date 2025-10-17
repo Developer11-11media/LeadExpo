@@ -40,6 +40,10 @@ export default function RootLayout() {
                 name="PreviewBadge.modal"
                 options={{ presentation: 'modal', headerShown: false }}
               />
+              <Stack.Screen
+                name="PreviewTicket.modal"
+                options={{ presentation: 'modal', headerShown: false }}
+              />
               <Slot />
             </Stack>
           </SafeAreaView>

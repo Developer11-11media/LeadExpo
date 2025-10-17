@@ -10,7 +10,7 @@ import {
     Text,
     TextInput,
     TouchableOpacity,
-    View,
+    View
 } from "react-native";
 
 import { RegisterTicketdb } from "../services/functionsDB";
@@ -24,7 +24,7 @@ interface RegisterData {
     employee: string;
     phone: string;
     email: string;
-    ticketType: "GENERAL";
+    ticketType: "Attendee";
     otherTicket: string;
 
 }
@@ -42,7 +42,7 @@ const Register: React.FC = () => {
         employee: "",
         phone: "",
         email: "",
-        ticketType: "GENERAL",
+        ticketType: "Attendee",
         otherTicket: "",
     });
 
@@ -68,8 +68,8 @@ const Register: React.FC = () => {
 
         if (!formData.firstName.trim()) newErrors.firstName = "First Name is required";
         if (!formData.lastname.trim()) newErrors.lastname = "Last Name is required";
-        if (!formData.company.trim()) newErrors.company = "Company is required";
-        if (!formData.employee.trim()) newErrors.employee = "Employee is required";
+        // if (!formData.company.trim()) newErrors.company = "Company is required";
+        // if (!formData.employee.trim()) newErrors.employee = "Employee is required";
 
         if (!formData.phone.trim()) {
             newErrors.phone = "Phone number is required";
@@ -105,15 +105,17 @@ const Register: React.FC = () => {
                     formData.phone,
                     formData.ticketType,
                     "",
-                    "Attendee"
+                    "System_Login"
                 );
 
-                // Aquí ya puedes generar el QR con los datos registrados
 
                 router.push({
-                    pathname: "/PreviewBadge.modal",
+                    pathname: "/PreviewTicket.modal",
                     params: {
-                        full_name: formData.firstName + " " + formData.lastname,
+                        idticket: 0,
+                        ticket_number_GlupUp: 0,
+                        firstname: formData.firstName,
+                        lastname: formData.lastname,
                         email: formData.email,
                         company: formData.company,
                         position_title: formData.employee,
@@ -122,10 +124,25 @@ const Register: React.FC = () => {
                     },
                 });
 
+                // 🔄 Limpia el formulario
+                setFormData({
+                    firstName: "",
+                    lastname: "",
+                    email: "",
+                    company: "",
+                    employee: "",
+                    phone: "",
+                    ticketType: "Attendee",
+                    otherTicket: "",
+                });
 
-            } catch (error) {
-                console.error("Error registering ticket:", error);
-                // aquí podrías mostrar un toast o setear un error global
+            } catch (error: any) {
+                const newErrorse: Partial<Record<keyof RegisterData, string>> = {};
+                if (error.message === "Email already registered") {
+                    // detener el flujo
+                    newErrorse.email = "Email already registered";
+                    setErrors(newErrorse);
+                }
             } finally {
                 setLoading(false);
             }

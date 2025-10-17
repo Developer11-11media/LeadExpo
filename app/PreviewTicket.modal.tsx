@@ -5,14 +5,14 @@ import React, { useRef } from "react";
 import { Button, Platform, StyleSheet, View } from "react-native";
 import ViewShot from "react-native-view-shot";
 import { RegisterTicketdb } from "../services/functionsDB";
-import TicketBadge from "./TicketBadge";
+import TicketRegister from "./TicketRegister";
 
 export const unstable_settings = {
   presentation: 'modal',
 };
 
 
-export default function PreviewBadgeModal() {
+export default function PreviewTicketmodal() {
   const router = useRouter();
   const params = useLocalSearchParams();
 
@@ -29,7 +29,6 @@ export default function PreviewBadgeModal() {
     position_title: params.position_title as string,
     phone_number: params.phone_number as string,
     type_ticket: params.type_ticket as string,
-    registres: params.registres as string,
   };
 
 
@@ -53,7 +52,7 @@ export default function PreviewBadgeModal() {
     try {
 
       //Registrar la informacion
-      if(ticketData.idticket === 0 && ticketData.registres === 'false'){
+      if(ticketData.idticket === 0){
         const dataticket = await RegisterTicketdb(
         ticketData.ticket_number_GlupUp,
         ticketData.firstname,
@@ -192,15 +191,7 @@ export default function PreviewBadgeModal() {
     position: relative;
     top: -14px;
 ">
-
     </div>
-    <script>
-      window.onload = () => {
-        window.print();
-      };
-    </script>
-  </body>
-</html>
       `);
 
         win.document.close();
@@ -221,7 +212,7 @@ export default function PreviewBadgeModal() {
       {Platform.OS === "web" ? (
         // 🌐 Web
         <View nativeID="badge" className="badgeWeb">
-          <TicketBadge ticketData={ticketData} />
+          <TicketRegister ticketData={ticketData} />
         </View>
       ) : (
         // 📱 Mobile
@@ -235,13 +226,12 @@ export default function PreviewBadgeModal() {
           }}
         >
           <View style={{ flex: 1, backgroundColor: "white" }}>
-            <TicketBadge ticketData={ticketData} />
+            <TicketRegister ticketData={ticketData} />
           </View>
         </ViewShot>
       )}
 
       <View style={styles.actions}>
-        <Button title="Imprimir" onPress={handlePrint} />
         <Button title="Cerrar" onPress={() => router.back()} />
       </View>
     </View>

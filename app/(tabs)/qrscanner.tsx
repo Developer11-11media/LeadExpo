@@ -1,7 +1,7 @@
 import { useFocusEffect, useRouter } from 'expo-router';
 import React, { useContext, useState } from 'react';
 import { Alert, Platform, View, } from 'react-native';
-import { GetTicketFromExcel, Registerpotential_clients, validateProspect, validate_potential_clients } from "../../services/functionsDB";
+import { GetDataTicket, GetTicketFromExcel, Registerpotential_clients, validateProspect, validate_potential_clients } from "../../services/functionsDB";
 import { UserContext } from "../../services/UserContext";
 import QRScannerScreen from '../QRScannerScreen';
 
@@ -15,8 +15,29 @@ export default function QRScannerTab() {
 
         //Validamos que si es admin debe registrarlo en los ticket 
         if (user && user.role === "admin") {
-          if (!(typeof data === "string" && data.toLowerCase().startsWith("http"))) {
 
+          if (typeof data === "string" && data.includes("@")) {
+            const datatickes= await GetDataTicket(data);
+
+            router.push({
+            pathname: "/PreviewBadge.modal",
+            params: {
+              idticket: 0,
+              ticket_number_GlupUp: datatickes.ticket_number_GlupUp,
+              firstname: datatickes.firstname,
+              lastname: datatickes.lastname,
+              email: datatickes.email,
+              company: datatickes.company,
+              position_title: datatickes.employee,
+              phone_number: datatickes.phone,
+              type_ticket: datatickes.type_ticket,
+              registres: 'true'
+            },
+          });
+            return;
+          }
+
+          if (typeof data === "string" && data.toLowerCase().startsWith("http")) {
             if (Platform.OS === 'web') {
               window.alert(
                 'El código QR ya esta generado '
@@ -99,6 +120,7 @@ export default function QRScannerTab() {
               position_title: Excel.employee,
               phone_number: Excel.phone,
               type_ticket: Excel.type_ticket,
+              registres: 'false'
             },
           });
 

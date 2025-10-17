@@ -233,6 +233,7 @@ const ProspectsListScreen: React.FC<ProspectsListScreenProps> = ({
         position_title: prospect.position,
         phone_number: 0,
         type_ticket: prospect.registrationType,
+         registres: 'true',
       },
     });
 
