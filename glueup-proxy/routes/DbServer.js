@@ -103,6 +103,17 @@ router.post("/registerticket", async (req, res) => {
   } = req.body;
 
   try {
+    //Validamos si existe el email
+    const [existing] = await pool.execute(
+      "SELECT id FROM tickets WHERE email = ? LIMIT 1",
+      [email]
+    );
+
+    if (existing.length > 0) {
+      // 👇 Enviar respuesta clara al frontend
+      return res.status(400).json({ message: "Email already registered" });
+    }
+    
     const sql = `
       INSERT INTO tickets
         (ticket_number_GlupUp, first_name, last_name, email, company, position_title,
