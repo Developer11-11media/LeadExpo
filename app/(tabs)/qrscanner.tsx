@@ -16,7 +16,7 @@ export default function QRScannerTab() {
         //Validamos que si es admin debe registrarlo en los ticket 
         if (user && user.role === "admin") {
 
-          if (typeof data === "string" && data.includes("@")) {
+          if (typeof data === "string" && data.includes("@") && !data.toLowerCase().includes("ticket")) {
             const datatickes= await GetDataTicket(data);
 
             router.push({
@@ -51,6 +51,20 @@ export default function QRScannerTab() {
             return;
           }
 
+          if (typeof data === "string" && data.includes("@") && data.toLowerCase().includes("ticket")) {
+            if (Platform.OS === 'web') {
+              window.alert(
+                'El código QR ya esta generado '
+              );
+            } else {
+              Alert.alert(
+                'QR Insuficiente',
+                'El código QR ya esta generado.'
+              );
+            }
+            return;
+          }
+          
           const partes = data.split('/');
           const ticket = partes[partes.length - 1];
 

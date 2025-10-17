@@ -32,6 +32,20 @@ export default function PreviewBadgeModal() {
     registres: params.registres as string,
   };
 
+  const getTypeColor = (type: string): string => {
+  switch (type.toUpperCase()) {
+    case "ATTENDEE":
+      return "#ffffff";
+    case "EXHIBITOR":
+      return "#183999";
+    case "ROOFEROCON":
+      return "#f1b81b";
+    default:
+      return "#183999"; // color por defecto
+  }
+};
+
+const typeColor = getTypeColor(ticketData.type_ticket);
 
   async function getBase64FromUrl(imageUrl: string): Promise<string | null> {
     try {
@@ -53,14 +67,17 @@ export default function PreviewBadgeModal() {
     try {
 
       //Registrar la informacion
+      const company = ticketData.company || "";
+      const position_title = ticketData.position_title || "";
+
       if(ticketData.idticket === 0 && ticketData.registres === 'false'){
         const dataticket = await RegisterTicketdb(
         ticketData.ticket_number_GlupUp,
         ticketData.firstname,
         ticketData.lastname,
         ticketData.email,
-        ticketData.company,
-        ticketData.position_title,
+        company,
+        position_title,
         ticketData.phone_number,
         ticketData.type_ticket,
         "",
@@ -181,13 +198,13 @@ export default function PreviewBadgeModal() {
     bottom: 0px;
     width: inherit;
 ">
-        <div class="name">${ticketData.firstname + " " + ticketData.lastname}</div>
-        <div class="company">${ticketData.company || ""}</div>
-        <div class="position">${ticketData.position_title || ""}</div>
+        <div class="name">${ticketData.firstname.toUpperCase() + " " + ticketData.lastname.toUpperCase()}</div>
+        <div class="company">${ticketData.company.toUpperCase() || ""}</div>
+        <div class="position">${ticketData.position_title.toUpperCase() || ""}</div>
          <div 
     class="ticket-type-bar" 
     style="
-      background-color: #183999; /* Color según tipo de ticket */
+      background-color: ${typeColor};
       width: 100%;
       height: 30px;
       display: flex;
@@ -196,10 +213,10 @@ export default function PreviewBadgeModal() {
       border-radius: 5px;
     "
   >
-        <div style="color: white" class="type">${ticketData.type_ticket}</div>
+        <div style="color: black" class="type">${ticketData.type_ticket.toUpperCase()}</div>
  </div>
       </div>
-              <img src="${qrDataUrl}" alt="Código QR" style="position: relative;width: 145px;height: 145px;top: -26px;">
+              <img src="${qrDataUrl}" alt="Código QR" style="position: relative;width: 145px;height: 145px;top: -14px;">
       <!-- logo inferior -->
       <img class="sponsor" src="https://leads.expocontratista.com/img/Sponsors-01-01.png" alt="Patrocinador" style="
     position: relative;

@@ -6,8 +6,8 @@ import QRCode from "react-native-qrcode-svg";
 import ViewShot from "react-native-view-shot"; // para capturar imagen del badge
 
 type TicketData = {
-    idticket: number, 
-    ticket_number_GlupUp :string,
+    idticket: number,
+    ticket_number_GlupUp: string,
     firstname: string;
     lastname: string;
     email: string;
@@ -47,12 +47,26 @@ export default function TicketBadge({ ticketData }: { ticketData: TicketData }) 
         <View style={styles.container}>
             <ViewShot ref={viewRef} options={{ format: "png", quality: 1.0 }}>
                 <View style={styles.badge}>
+                    
                     <View style={styles.topRow}>
                         <Image
-                            source={require("../assets/images/nahica.jpeg")}
+                            source={require("../assets/images/EXPO2025.png")}
                             style={styles.leftImage}
                             resizeMode="contain"
                         />
+                    </View>
+                    {/* Datos centrados con espacios */}
+                    <Text style={styles.name}>{ticketData.firstname + " " + ticketData.lastname}</Text>
+                    <View style={{ height: 15 }} />
+                    <Text style={styles.company}>{ticketData.company}</Text>
+                    <View style={{ height: 15 }} />
+                    <Text style={styles.position}>{ticketData.position_title}</Text>
+                    <View style={{ height: 15 }} />
+                    <Text style={styles.type}>{ticketData.type_ticket}</Text>
+                    <View style={{ height: 5 }} />
+
+                    <View style={styles.topRow}>
+                        
                         <View style={styles.qrContainer}>
                             <QRCode
                                 value={JSON.stringify(ticketData)}
@@ -64,22 +78,9 @@ export default function TicketBadge({ ticketData }: { ticketData: TicketData }) 
                         </View>
                     </View>
 
-                    {/* Datos centrados con espacios */}
-                    <Text style={styles.name}>{ticketData.firstname + " " + ticketData.lastname}</Text>
-                    <View style={{ height: 35 }} />
-                    <Text style={styles.company}>{ticketData.company}</Text>
-                    <View style={{ height: 25 }} />
-                    <Text style={styles.position}>{ticketData.position_title}</Text>
-                    <View style={{ height: 25 }} />
-                    <Text style={styles.type}>{ticketData.type_ticket}</Text>
-                    <View style={{ height: 15 }} />
-
-                    {/* Línea divisoria */}
-                    <View style={styles.divider} />
-
                     {/* Imagen final centrada */}
                     <Image
-                       source={require("../assets/images/Sponsors-01-01.png")}
+                        source={require("../assets/images/Sponsors-01-01.png")}
                         style={styles.bottomImageback}
                         resizeMode="contain"
                     />
@@ -103,6 +104,7 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: "center",
         justifyContent: "center",
+        maxHeight:600
     },
     badge: {
         backgroundColor: "#fff",
@@ -114,14 +116,12 @@ const styles = StyleSheet.create({
         borderColor: "black",
     },
     topRow: {
-        flexDirection: "row",
         justifyContent: "space-between",
         alignItems: "center",
         width: "100%",
-        marginBottom: 16,
     },
     leftImage: {
-        width: 130,
+        width: 220,
         height: 100,
     },
     qrContainer: {
