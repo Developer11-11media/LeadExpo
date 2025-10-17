@@ -471,7 +471,7 @@ router.get("/DataGlupUp/:ticket_id", async (req, res) => {
   Company AS company,
   title AS employee,
   Email AS email,
-  ticket_name AS type_ticket
+  category AS type_ticket
 FROM DataGlupUp
 WHERE ticket_id = ?
 LIMIT 1;
