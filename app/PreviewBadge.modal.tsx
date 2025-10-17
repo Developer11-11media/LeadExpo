@@ -148,7 +148,7 @@ export default function PreviewBadgeModal() {
       .position,
       .type {
         font-size: 20px;
-        margin: 33px 0;
+        margin: 15px 0;
       }
 
       /* Divider justo arriba del logo */
@@ -179,12 +179,25 @@ export default function PreviewBadgeModal() {
     position: relative;
     top: 0px;
     bottom: 0px;
+    width: inherit;
 ">
         <div class="name">${ticketData.firstname + " " + ticketData.lastname}</div>
         <div class="company">${ticketData.company || ""}</div>
         <div class="position">${ticketData.position_title || ""}</div>
+         <div 
+    class="ticket-type-bar" 
+    style="
+      background-color: #7c3aed; /* Color según tipo de ticket */
+      width: 100%;
+      height: 30px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 5px;
+    "
+  >
         <div class="type">${ticketData.type_ticket}</div>
-
+ </div>
       </div>
               <img src="${qrDataUrl}" alt="Código QR" style="position: relative;width: 145px;height: 145px;top: -26px;">
       <!-- logo inferior -->

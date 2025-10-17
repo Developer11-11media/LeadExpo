@@ -40,7 +40,7 @@ const ProspectsListScreen: React.FC<ProspectsListScreenProps> = ({
   onExportAll,
   onLogout
 }) => {
-  const { user, loading: userLoading, logout} = useContext(UserContext);
+  const { user, loading: userLoading, logout } = useContext(UserContext);
   const [prospects, setProspects] = useState<Prospect[]>([]);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
@@ -54,15 +54,15 @@ const ProspectsListScreen: React.FC<ProspectsListScreenProps> = ({
     'All', 'VIP', 'General', 'Speaker', 'Press', 'Staff', 'Sponsor', 'Other'
   ];
 
-    useEffect(() => {
+  useEffect(() => {
 
     if (!userLoading && !user) {
       router.replace("/login"); // Redirige al login si no hay usuario
     }
-  },[user, userLoading]);
+  }, [user, userLoading]);
   const loadProspects = useCallback(async () => {
     try {
-
+      setProspects([]);
       setLoading(true);
 
       if (!user) return;
@@ -73,7 +73,7 @@ const ProspectsListScreen: React.FC<ProspectsListScreenProps> = ({
       } else {
         remoteProspects = await ProspectsListexhibitors(user?.email ?? "", user?.exhibitor_id ?? 0);
       }
-      setProspects([]);
+
 
       const formatted: Prospect[] = remoteProspects.map((r: any) => ({
         id: r.id?.toString() || Math.random().toString(),
@@ -140,17 +140,17 @@ const ProspectsListScreen: React.FC<ProspectsListScreenProps> = ({
         }
 
         const formatted: Prospect[] = remoteProspects.map((r: any) => ({
-        id: r.id?.toString() || Math.random().toString(),
-        firstname: r.firstname ?? 'Sin firstname',
-        lastname: r.lastname ?? 'Sin lastname',
-        email: r.email ?? '',
-        phone: r.phone ?? '',
-        company: r.company ?? '',
-        position: r.position ?? '',
-        registrationType: r.type_ticket ?? 'Other',
-        createdAt: r.created_at ?? new Date().toISOString(),
-        isStarred: false,
-      }));
+          id: r.id?.toString() || Math.random().toString(),
+          firstname: r.firstname ?? 'Sin firstname',
+          lastname: r.lastname ?? 'Sin lastname',
+          email: r.email ?? '',
+          phone: r.phone ?? '',
+          company: r.company ?? '',
+          position: r.position ?? '',
+          registrationType: r.type_ticket ?? 'Other',
+          createdAt: r.created_at ?? new Date().toISOString(),
+          isStarred: false,
+        }));
 
         setProspects(formatted);
         setStats({
@@ -180,17 +180,17 @@ const ProspectsListScreen: React.FC<ProspectsListScreenProps> = ({
     }
     setProspects([]);
     const formatted: Prospect[] = remoteProspects.map((r: any) => ({
-        id: r.id?.toString() || Math.random().toString(),
-        firstname: r.firstname ?? 'Sin firstname',
-        lastname: r.lastname ?? 'Sin lastname',
-        email: r.email ?? '',
-        phone: r.phone ?? '',
-        company: r.company ?? '',
-        position: r.position ?? '',
-        registrationType: r.type_ticket ?? 'Other',
-        createdAt: r.created_at ?? new Date().toISOString(),
-        isStarred: false,
-      }));
+      id: r.id?.toString() || Math.random().toString(),
+      firstname: r.firstname ?? 'Sin firstname',
+      lastname: r.lastname ?? 'Sin lastname',
+      email: r.email ?? '',
+      phone: r.phone ?? '',
+      company: r.company ?? '',
+      position: r.position ?? '',
+      registrationType: r.type_ticket ?? 'Other',
+      createdAt: r.created_at ?? new Date().toISOString(),
+      isStarred: false,
+    }));
 
     setProspects(formatted);
     setRefreshing(false);
@@ -219,6 +219,29 @@ const ProspectsListScreen: React.FC<ProspectsListScreenProps> = ({
     );
 
   };
+ const filteredProspects = prospects.filter(p => {
+  // Filtra por tipo
+  const matchesType = selectedType === 'All' || p.registrationType === selectedType;
+
+  // Filtra por búsqueda en nombre, apellido, empresa o email
+  const search = searchTerm.toLowerCase();
+  const matchesSearch =
+    p.firstname.toLowerCase().includes(search) ||
+    p.lastname.toLowerCase().includes(search) ||
+    p.company.toLowerCase().includes(search) ||
+    p.email.toLowerCase().includes(search);
+  return matchesType && matchesSearch;
+});
+
+useEffect(() => {
+  // Condición dentro del efecto, no fuera
+  if (filteredProspects.length > 0 && searchTerm.length > 0) {
+    setShowFilters(true);
+  } else {
+    setShowFilters(false);
+  }
+}, [filteredProspects, searchTerm]);
+
   const badge = (prospect: Prospect) => {
 
     router.push({
@@ -233,7 +256,7 @@ const ProspectsListScreen: React.FC<ProspectsListScreenProps> = ({
         position_title: prospect.position,
         phone_number: 0,
         type_ticket: prospect.registrationType,
-         registres: 'true',
+        registres: 'true',
       },
     });
 
@@ -379,7 +402,6 @@ const ProspectsListScreen: React.FC<ProspectsListScreenProps> = ({
   }
 
 
-
   return (
     <SafeAreaView style={styles.container}>
       {/* Header */}
@@ -446,28 +468,14 @@ const ProspectsListScreen: React.FC<ProspectsListScreenProps> = ({
         {showFilters && (
           <View style={styles.filtersContainer}>
             <FlatList
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              data={registrationTypes}
-              keyExtractor={(item) => item}
-              renderItem={({ item }) => (
-                <TouchableOpacity
-                  style={[
-                    styles.filterChip,
-                    selectedType === item && styles.filterChipActive
-                  ]}
-                  onPress={() => setSelectedType(item)}
-                >
-                  <Text
-                    style={[
-                      styles.filterChipText,
-                      selectedType === item && styles.filterChipTextActive
-                    ]}
-                  >
-                    {item}
-                  </Text>
-                </TouchableOpacity>
-              )}
+              data={filteredProspects} // <-- lista filtrada
+              keyExtractor={(item) => item.id.toString()} // <-- id como string
+              renderItem={renderProspectCard} // <-- tu función ya existente
+              contentContainerStyle={styles.listContainer}
+              
+              refreshControl={
+                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+              }
             />
           </View>
         )}
