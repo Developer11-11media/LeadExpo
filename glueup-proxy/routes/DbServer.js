@@ -113,7 +113,7 @@ router.post("/registerticket", async (req, res) => {
       // 👇 Enviar respuesta clara al frontend
       return res.status(400).json({ message: "Email already registered" });
     }
-    
+
     const sql = `
       INSERT INTO tickets
         (ticket_number_GlupUp, first_name, last_name, email, company, position_title,
@@ -501,5 +501,52 @@ LIMIT 1;
   }
 });
 
+router.get("/DataTicket/:email", async (req, res) => {
+  try {
+    const { email } = req.params;
+
+    if (!email) {
+      return res.status(400).json({ message: "email es requerido" });
+    }
+
+    const sql = `
+
+     SELECT 
+  ticket_number_GlupUp AS ticket_number_GlupUp,
+  first_name AS firstname,
+  last_name AS lastname,
+  phone_number AS phone,
+  company AS company,
+  position_title AS employee,
+  email AS email,
+  type_ticket AS type_ticket
+FROM tickets
+WHERE email = ?
+LIMIT 1;
+    `;
+
+    const [rows] = await pool.execute(sql, [ticket_id]);
+
+    if (!rows || rows.length === 0) {
+      return res.status(404).json({ message: "No se encontró el ticket" });
+    }
+
+    const record = rows[0];
+
+    res.status(200).json({
+      ticket_number_GlupUp: record.ticket_number_GlupUp,
+      firstname: record.firstname,
+      lastname: record.lastname,
+      phone: record.phone,
+      company: record.company,
+      employee: record.employee,
+      email: record.email,
+      type_ticket: record.type_ticket
+    });
+  } catch (err) {
+    console.error("Error get RegisterTicketlogin:", err);
+    res.status(500).json({ message: "Error al obtener RegisterTicketlogin" });
+  }
+});
 
 export default router;
